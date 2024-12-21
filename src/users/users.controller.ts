@@ -1,4 +1,9 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 
 @Controller('users')
-export class UsersController {}
+export class UsersController {
+  @Get()
+  findAll(@Query('role') role: 'INTERN' | 'ENGINEER' | 'ADMIN') {
+    return { result: true };
+  }
+}
