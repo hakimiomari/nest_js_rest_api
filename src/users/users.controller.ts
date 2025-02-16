@@ -29,7 +29,6 @@ export class UsersController {
     const usersByHighestId = [...this.users].sort((a, b) => {
       return b.id - a.id;
     });
-    console.log(this.users);
     return { result: true, usersByHighestId, users: [...this.users] };
   }
 
