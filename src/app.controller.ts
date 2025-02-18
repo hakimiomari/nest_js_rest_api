@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Header, HostParam, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Response } from 'express';
 
 @Controller() // This decorator marks the class as a NestJS controller
 export class AppController {
@@ -8,5 +9,19 @@ export class AppController {
   @Get() // This decorator creates a GET endpoint
   getHello(): string {
     return this.appService.getHello(); // Calls the getHello method from AppService
+  }
+  @Get('all')
+  findAll(@HostParam('subdomain') subdomain: string){
+    console.log(subdomain)
+    return 'This action returns all cats';
+  }
+
+  // wildcard route
+  @Get('abcd')
+  wildcard(@Res() res: Response) {
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.send({message:'This is a wildcard route'});
   }
 }
