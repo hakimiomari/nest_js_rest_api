@@ -1,0 +1,49 @@
+PORT=8000
+
+📦 my-nest-app
+┣ 📂 src
+┃ ┣ 📂 auth                # Authentication module
+┃ ┃ ┣ 📜 auth.module.ts
+┃ ┃ ┣ 📜 auth.controller.ts
+┃ ┃ ┣ 📜 auth.service.ts
+┃ ┃ ┣ 📜 auth.guard.ts
+┃ ┃ ┣ 📜 jwt.strategy.ts
+┃ ┃ ┗ 📜 local.strategy.ts
+┃ ┣ 📂 users               # Users module
+┃ ┃ ┣ 📜 users.module.ts
+┃ ┃ ┣ 📜 users.controller.ts
+┃ ┃ ┣ 📜 users.service.ts
+┃ ┃ ┗ 📜 users.entity.ts
+┃ ┣ 📂 common              # Shared utilities
+┃ ┃ ┣ 📂 decorators
+┃ ┃ ┣ 📂 filters
+┃ ┃ ┣ 📂 interceptors
+┃ ┃ ┗ 📂 pipes
+┃ ┣ 📂 config              # Configuration files
+┃ ┃ ┗ 📜 config.module.ts
+┃ ┣ 📂 database            # Database connection and models
+┃ ┃ ┣ 📜 database.module.ts
+┃ ┃ ┗ 📜 prisma.service.ts  # (if using Prisma)
+┃ ┣ 📂 middleware          # Custom middleware functions
+┃ ┣ 📂 guards             # Global guards
+┃ ┣ 📂 interceptors       # Global interceptors
+┃ ┣ 📂 pipes              # Custom pipes
+┃ ┣ 📜 app.module.ts      # Root module
+┃ ┣ 📜 app.controller.ts  # Main controller
+┃ ┣ 📜 app.service.ts     # Main service
+┃ ┗ 📜 main.ts            # Entry point
+┣ 📂 test                 # Unit & e2e tests
+┣ 📂 public               # Public assets (if applicable)
+┣ 📂 docs                 # API documentation (Swagger, Postman collections, etc.)
+┣ 📂 scripts              # Custom CLI scripts
+┣ 📜 .env                 # Environment variables
+┣ 📜 .gitignore           # Git ignore file
+┣ 📜 package.json         # Dependencies and scripts
+┣ 📜 tsconfig.json        # TypeScript configuration
+┣ 📜 nest-cli.json        # Nest CLI configuration
+┗ 📜 README.md            # Project documentation
+
+
+for jwt authentication
+
+yarn @nestjs/jwt @nestjs/passport passport passport-jwt passport-local

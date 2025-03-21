@@ -23,6 +23,7 @@ export class UsersController {
     },
   ];
 
+  @ApiTags('Get All Users')
   @Get()
   @ApiOperation({ summary: 'Get all users' })
   findAll(@Query('role') role: 'INTERN' | 'ENGINEER' | 'ADMIN') {
