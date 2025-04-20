@@ -9,7 +9,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(username: string, password: string): Promise<any> {
+  async signIn(username: string, password: string, response): Promise<any> {
     const user = await this.userService.findOne(username);
     if (!user) {
       throw new Error('User not found');
@@ -18,18 +18,22 @@ export class AuthService {
       throw new UnauthorizedException();
     }
     const payload = { sub: user.userId, username: user.username };
+    const access_token = await this.jwtService.signAsync(payload);
+
+    response.cookie('access_token', access_token, {
+      httpOnly: true,
+      secure: true,
+    });
     return {
       payload,
-      access_token: await this.jwtService.signAsync(payload),
     };
   }
 
-  async validateUser(username: string, password: string) : Promise<any> {
+  async validateUser(username: string, password: string): Promise<any> {
     const user = await this.userService.findOne(username);
     if (!user) return null;
     if (user.password === password) {
       const payload = { sub: user.userId, username: user.username };
     }
-  
   }
 }

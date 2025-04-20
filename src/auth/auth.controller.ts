@@ -6,10 +6,12 @@ import {
   HttpStatus,
   Post,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -17,9 +19,12 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(@Body() signInDto: Record<string, any>) {
+  async signIn(
+    @Body() signInDto: Record<string, any>,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     const { username, password } = signInDto;
-    return this.authService.signIn(username, password);
+    return this.authService.signIn(username, password, response);
   }
 
   @UseGuards(AuthGuard)
