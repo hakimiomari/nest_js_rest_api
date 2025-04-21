@@ -1,8 +1,10 @@
+import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 
 export type User = any;
 @Injectable()
 export class UsersService {
+  constructor(private readonly jwtService: JwtService) {}
   private readonly users = [
     {
       userId: 1,
@@ -18,5 +20,12 @@ export class UsersService {
 
   async findOne(username: string): Promise<User> {
     return this.users.find((user) => user.username === username);
+  }
+
+  async getUser(request) {
+    const cookie = request.cookies['access_token'];
+    console.log(cookie);
+    const data = await this.jwtService.verifyAsync(cookie);
+    return cookie;
   }
 }

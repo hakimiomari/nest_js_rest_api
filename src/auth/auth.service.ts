@@ -36,4 +36,11 @@ export class AuthService {
       const payload = { sub: user.userId, username: user.username };
     }
   }
+
+  async getUser(request) {
+    const cookie = request.cookies['access_token'];
+    console.log(cookie);
+    const data = await this.jwtService.verifyAsync(cookie);
+    return cookie;
+  }
 }

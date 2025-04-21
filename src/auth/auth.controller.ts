@@ -5,17 +5,21 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Request,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
-import { Response } from 'express';
+import { Request, Response } from 'express';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private jwtService: JwtService,
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -27,14 +31,19 @@ export class AuthController {
     return this.authService.signIn(username, password, response);
   }
 
-  @UseGuards(AuthGuard)
-  @Get('profile')
-  async getProfile(@Request() req) {
-    return req.user;
-  }
-  @UseGuards(AuthGuard)
-  @Get('logout')
-  async logout(@Request() req) {
-    return req.logout();
+  // @UseGuards(AuthGuard)
+  // @Get('profile')
+  // async getProfile(@Request() req) {
+  //   return req.user;
+  // }
+  // @UseGuards(AuthGuard)
+  // @Get('logout')
+  // async logout(@Request() req) {
+  //   return req.logout();
+  // }
+
+  @Get('user')
+  async getUser(@Req() request: Request) {
+    this.authService.getUser(request);
   }
 }
