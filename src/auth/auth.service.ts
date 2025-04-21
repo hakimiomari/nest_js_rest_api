@@ -20,9 +20,9 @@ export class AuthService {
     const payload = { sub: user.userId, username: user.username };
     const access_token = await this.jwtService.signAsync(payload);
 
-    response.cookie('access_token', access_token, {
+    response.cookie('token', access_token, {
       httpOnly: true,
-      secure: true,
+      secure: false,
     });
     return {
       payload,
@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   async getUser(request) {
-    const cookie = request.cookies['access_token'];
+    const cookie = request.cookies['token'];
     console.log(cookie);
     const data = await this.jwtService.verifyAsync(cookie);
     return cookie;

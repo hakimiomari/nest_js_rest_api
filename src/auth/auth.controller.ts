@@ -31,19 +31,21 @@ export class AuthController {
     return this.authService.signIn(username, password, response);
   }
 
-  // @UseGuards(AuthGuard)
-  // @Get('profile')
-  // async getProfile(@Request() req) {
-  //   return req.user;
-  // }
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  async getProfile() {
+    return 'profile';
+  }
   // @UseGuards(AuthGuard)
   // @Get('logout')
   // async logout(@Request() req) {
   //   return req.logout();
   // }
-
+  @UseGuards(AuthGuard)
   @Get('user')
   async getUser(@Req() request: Request) {
-    this.authService.getUser(request);
+    console.log('request.cookie => ', request.cookies['token']);
+    return request.cookies['token'];
+    // this.authService.getUser(request);
   }
 }
