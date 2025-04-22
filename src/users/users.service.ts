@@ -23,9 +23,10 @@ export class UsersService {
   }
 
   async getUser(request) {
-    const cookie = request.cookies['access_token'];
-    console.log(cookie);
+    const cookie = request.cookies['token'];
     const data = await this.jwtService.verifyAsync(cookie);
-    return cookie;
+    return {
+      data: data,
+    };
   }
 }

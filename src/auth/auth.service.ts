@@ -1,6 +1,7 @@
 import { Injectable, Controller, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -37,10 +38,10 @@ export class AuthService {
     }
   }
 
-  async getUser(request) {
-    const cookie = request.cookies['token'];
-    console.log(cookie);
-    const data = await this.jwtService.verifyAsync(cookie);
-    return cookie;
+  async logout(response: Response) {
+    response.clearCookie('token');
+    return {
+      message: 'success',
+    };
   }
 }

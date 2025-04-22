@@ -1,11 +1,13 @@
-import { Controller, Get, Param, Query, Req } from '@nestjs/common';
+import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UsersService } from './users.service';
 import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from '../guard/auth.guard';
 
 @ApiTags('Users')
 @Controller('users')
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -47,11 +49,9 @@ export class UsersController {
   // }
 
   @Get('user')
+  @ApiOperation({ summary: 'find specific user' })
   async getUser(@Req() request: Request) {
-    // this.usersService.getUser(request);
-    const token = request.cookies['access_token']; // replace with actual cookie name
-    console.log('Token:', token);
-    const cookie = await this.jwtService.verifyAsync(token);
-    return cookie;
+    console.log(AuthGuard);
+    return this.usersService.getUser(request);
   }
 }

@@ -5,13 +5,12 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
 @Controller('auth')
@@ -36,16 +35,10 @@ export class AuthController {
   async getProfile() {
     return 'profile';
   }
-  // @UseGuards(AuthGuard)
-  // @Get('logout')
-  // async logout(@Request() req) {
-  //   return req.logout();
-  // }
+
   @UseGuards(AuthGuard)
-  @Get('user')
-  async getUser(@Req() request: Request) {
-    console.log('request.cookie => ', request.cookies['token']);
-    return request.cookies['token'];
-    // this.authService.getUser(request);
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) response: Response) {
+    return this.authService.logout(response);
   }
 }
