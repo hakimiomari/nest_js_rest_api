@@ -3,11 +3,10 @@ import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UsersService } from './users.service';
 import { JwtService } from '@nestjs/jwt';
-import { AuthGuard } from '../guard/auth.guard';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('Users')
 @Controller('users')
-@UseGuards(AuthGuard)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -48,10 +47,10 @@ export class UsersController {
   //   return { result: true, id };
   // }
 
+  @UseGuards(AuthGuard)
   @Get('user')
   @ApiOperation({ summary: 'find specific user' })
   async getUser(@Req() request: Request) {
-    console.log(AuthGuard);
     return this.usersService.getUser(request);
   }
 }
