@@ -11,14 +11,9 @@ import {
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { Response } from 'express';
-import { JwtService } from '@nestjs/jwt';
-
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -26,8 +21,8 @@ export class AuthController {
     @Body() signInDto: Record<string, any>,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const { username, password } = signInDto;
-    return this.authService.signIn(username, password, response);
+    const { email, password } = signInDto;
+    return this.authService.signIn(email, password, response);
   }
 
   @UseGuards(AuthGuard)

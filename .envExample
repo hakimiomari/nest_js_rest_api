@@ -47,3 +47,5 @@ PORT=8000
 for jwt authentication
 
 yarn @nestjs/jwt @nestjs/passport passport passport-jwt passport-local
+# DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+DATABASE_URL="postgresql://postgres:Pgl@123@localhost:5432/arzan_ghiza?schema=public"
