@@ -11,19 +11,18 @@ export class AuthService {
   ) {}
 
   async signIn(email: string, password: string, response): Promise<any> {
-    const user = await this.prisma.users.findOne({
+    const user = await this.prisma.users.findUnique({
       where: {
-        email,
+        email: email,
       },
     });
-    console.log(user);
     if (!user) {
       throw new Error('User not found');
     }
     if (user.password !== password) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.userId, username: user.username };
+    const payload = { sub: user.id, username: user.email };
     const access_token = await this.jwtService.signAsync(payload);
 
     response.cookie('token', access_token, {
@@ -36,14 +35,14 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.prisma.users.findOne({
+    const user = await this.prisma.users.findUnique({
       where: {
         email,
       },
     });
     if (!user) return null;
     if (user.password === password) {
-      const payload = { sub: user.userId, username: user.username };
+      const payload = { sub: user.id, username: user.email };
     }
   }
 
