@@ -43,6 +43,8 @@ export class AuthService {
     };
   }
 
+  // async singup(data: userDto) {}
+
   async signIn(email: string, password: string, response): Promise<any> {
     const user = await this.prisma.users.findUnique({
       where: {
