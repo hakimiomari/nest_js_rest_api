@@ -12,18 +12,21 @@ import {
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { Request, Response } from 'express';
+import { CreateUserDto } from './dto/user.dto';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(
-    @Body() signInDto: Record<string, any>,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    const { email, password } = signInDto;
+  async signIn(@Body() data, @Res({ passthrough: true }) response: Response) {
+    const { email, password } = data;
     return this.authService.signIn(email, password, response);
+  }
+
+  @Post('signup')
+  async singup(@Body() dto: CreateUserDto) {
+    return this.authService.singup(dto);
   }
 
   @UseGuards(AuthGuard)

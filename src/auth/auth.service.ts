@@ -1,8 +1,15 @@
-import { Injectable, Controller, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Controller,
+  UnauthorizedException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { CreateUserDto } from './dto/user.dto';
+import * as bcrypt from 'bcryptjs';
 
 interface Tokens {
   access_token: string;
@@ -43,8 +50,56 @@ export class AuthService {
     };
   }
 
-  // async singup(data: userDto) {}
+  async hashPassword(password: string) {
+    return await bcrypt.hash(password, 10);
+  }
 
+  async singup(data: CreateUserDto) {
+    const password = await this.hashPassword(data.password);
+
+    const isUserExist = await this.findUser(data.email);
+    if (isUserExist) {
+      throw new ConflictException('User already exist');
+    }
+
+    const user = await this.prisma.users.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        password,
+      },
+    });
+
+    const { access_token, refresh_token } = await this.getTokens(
+      user.id,
+      user.email,
+    );
+    await this.updateRefreshToken(user.id, refresh_token);
+    return {
+      access_token,
+      refresh_token,
+    };
+  }
+
+  async findUser(email: string) {
+    return await this.prisma.users.findUnique({
+      where: {
+        email,
+      },
+    });
+  }
+
+  // update refresh token
+  async updateRefreshToken(user_id: number, refresh_token: string) {
+    await this.prisma.users.update({
+      where: {
+        id: user_id,
+      },
+      data: {
+        refresh_token: refresh_token,
+      },
+    });
+  }
   async signIn(email: string, password: string, response): Promise<any> {
     const user = await this.prisma.users.findUnique({
       where: {
